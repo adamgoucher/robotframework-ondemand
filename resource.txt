@@ -1,0 +1,41 @@
+*** Variables ***
+
+${DELAY}         0
+${HOST}          saucelabs.com
+${LOGIN URL}     http://${HOST}/login
+${ACCOUNT URL}   https://${HOST}/account
+${VALID USER}    demo
+${VALID PASSWD}  mode
+
+*** Settings ***
+
+Documentation  A resource file containing the demo app specific keywords and variables that create our own domain specific language. Also SeleniumLibrary itself is imported here so that tests only need to import this resource file.
+
+Variables      ondemand.py
+Library        SeleniumLibrary  server_host=${SELENIUM HOST}  server_port=${SELENIUM PORT}  timeout=15.0
+
+
+*** Keywords ***
+
+Open Login Page
+    Open Browser  ${LOGIN URL}  ${BROWSER}
+    Maximize Browser Window
+    Set Selenium Speed  ${DELAY}
+    Title Should Be  Login - Sauce Labs
+
+Go To Login Page
+    Go To  ${LOGIN URL}
+    Title Should Be  Login - Sauce Labs
+
+Input Username  [Arguments]  ${username}
+    Input Text  username  ${username}
+
+Input Password  [Arguments]  ${password}
+    Input Text  password  ${password}
+
+Submit Credentials
+    Click Element  submit
+
+Account Page Should Be Open
+    Location Should Be  ${ACCOUNT URL}
+    Title Should Be  Account Info - Sauce Labs
